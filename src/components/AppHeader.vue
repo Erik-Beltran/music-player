@@ -2,14 +2,12 @@
 import { useDebounce } from '@/composables/useDebounce'
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import IconHome from './icons/IconHome.vue'
-import IconSpotify from './icons/IconSpotify.vue'
+import IconSpotify from '@icons/IconSpotify.vue'
+import IconHome from '@icons/IconHome.vue'
 
 const query = ref('')
 const debouncedQuery = useDebounce(query, 500)
 const router = useRouter()
-
-console.log('query', query.value)
 
 watch(debouncedQuery, (val) => {
   const trimmed = val.trim()
@@ -29,7 +27,7 @@ watch(debouncedQuery, (val) => {
     <input
       v-model="query"
       type="search"
-      placeholder="What do you wanna play"
+      placeholder="What do you want to play?"
       class="w-full p-2 px-4 rounded-full bg-zinc-500/30 text-white focus:outline-none focus:ring-2"
     />
   </div>

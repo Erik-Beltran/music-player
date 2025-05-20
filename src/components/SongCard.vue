@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { Song } from '@/types/song'
+import type { Release } from '@/types/song'
 import CardPlayButton from './CardPlayButton.vue'
 
 interface Props {
-  song: Song
+  release: Release
 }
 defineProps<Props>()
 </script>
@@ -19,16 +19,16 @@ defineProps<Props>()
     </div>
 
     <RouterLink
-      to="/"
+      :to="`/album/${release.id}`"
       class="playlist-item transition-all duration-300 flex relative p-2 overflow-hidden gap-2 pb-6 rounded-md w-44 flex-col"
     >
       <picture class="h-auto w-full flex-none aspect-auto">
-        <img :src="song.images[0]?.url" alt="song cover" class="rounded mb-2" />
+        <img :src="release.images[0]?.url" alt="song cover" class="rounded mb-2" />
       </picture>
       <div class="flex flex-auto flex-col px-2">
-        <h4 v-text="song.name" class="font-medium text-white text-sm" />
+        <h4 class="font-medium text-white text-sm">{{ release.name }}</h4>
         <p class="text-gray-400 text-xs">
-          {{ song.artists.map((artist) => artist.name).join(', ') }}
+          {{ release.artists.map((artist) => artist.name).join(', ') }}
         </p>
       </div>
     </RouterLink>

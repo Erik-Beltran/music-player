@@ -1,9 +1,9 @@
-import axiosInstance from './axios'
+import axios from 'axios'
 
 export async function getToken(): Promise<string> {
   const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID
   const CLIENT_SECRET = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET
-  const res = await axiosInstance.post(
+  const res = await axios.post(
     'https://accounts.spotify.com/api/token',
     'grant_type=client_credentials',
     {

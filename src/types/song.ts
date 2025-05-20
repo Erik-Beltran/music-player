@@ -1,4 +1,4 @@
-export interface Song {
+export interface Release {
   album_type: string
   artists: Artist[]
   available_markets: string[]

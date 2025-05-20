@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import SongCard from '@/components/SongCard.vue'
-import { getNewReleases } from '@/services/spotifyApi'
-import type { Song } from '@/types/song'
 import { onMounted, ref } from 'vue'
 
-const newReleases = ref<Song[]>([])
+import SongCard from '@/components/SongCard.vue'
+
+import { getNewReleases } from '@/services/spotifyApi'
+import type { Release } from '@/types/song'
+
+const newReleases = ref<Release[]>([])
 
 onMounted(async () => {
   try {
     newReleases.value = await getNewReleases()
-    console.log(newReleases.value)
   } catch (err) {
     console.error('Failed to load new releases', err)
   }
@@ -22,9 +23,9 @@ onMounted(async () => {
       <h2 class="text-2xl font-bold">New Releases</h2>
       <div class="flex overflow-x-auto gap-x-4 pb-2">
         <SongCard
-          v-for="song in newReleases"
-          :key="song.id"
-          :song="song"
+          v-for="release in newReleases"
+          :key="release.id"
+          :release="release"
           class="min-w-[150px] flex-shrink-0"
         />
       </div>
