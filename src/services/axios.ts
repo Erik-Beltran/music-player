@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getStoredToken } from './spotifyApi'
+import { getValidToken } from './apotifyAuth'
 
 const axiosInstance = axios.create({
   baseURL: 'https://api.spotify.com/v1',
@@ -9,8 +9,8 @@ const axiosInstance = axios.create({
 })
 
 axiosInstance.interceptors.request.use(
-  (config) => {
-    const token = getStoredToken()
+  async (config) => {
+    const token = await getValidToken()
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`
     }
