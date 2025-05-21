@@ -21,6 +21,12 @@ const router = createRouter({
       component: () => import('@/views/ArtistView.vue'),
       props: true,
     },
+    {
+      path: '/search/:query',
+      name: 'Search',
+      component: () => import('@/views/SearchView.vue'),
+      props: true,
+    },
   ],
 })
 

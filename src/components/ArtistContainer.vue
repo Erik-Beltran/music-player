@@ -3,12 +3,12 @@ import SongsTable from '@components/SongsTable.vue'
 import CardPlayButton from '@components/CardPlayButton.vue'
 
 import type { Artist } from '@/types/artist'
-import type { BasedTrack } from '@/types/song'
 import { formatNumber } from '@/utils/formatter'
+import type { TopTrack } from '@/types/topTracks'
 
 interface Props {
   artist: Artist | undefined
-  topTracks: BasedTrack[] | []
+  topTracks: TopTrack[] | []
 }
 defineProps<Props>()
 </script>
@@ -46,7 +46,7 @@ defineProps<Props>()
 
       <section class="lg:p-8 mt-2">
         <h3 class="font-bold text-2xl mb-2">Popular</h3>
-        <SongsTable :songs="topTracks" :key="artist.id" :show-artist="false" />
+        <SongsTable :songs="topTracks" :key="artist.id" :show-artist="false" :show-image="true" />
       </section>
     </div>
   </div>

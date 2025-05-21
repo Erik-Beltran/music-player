@@ -6,11 +6,11 @@ import ArtistContainer from '@/components/ArtistContainer.vue'
 
 import { getArtist, getArtistTopTracks } from '@/services/spotifyApi'
 import type { Artist } from '@/types/artist'
-import type { BasedTrack } from '@/types/song'
+import type { TopTrack } from '@/types/topTracks'
 
 const route = useRoute()
 const artist = ref<Artist>()
-const topTracks = ref<BasedTrack[]>([])
+const topTracks = ref<TopTrack[]>([])
 
 const {
   params: { id },
