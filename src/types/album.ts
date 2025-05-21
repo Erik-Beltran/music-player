@@ -1,3 +1,6 @@
+import type { Artist, ExternalIDS, ExternalUrls, Image } from './common'
+import type { TopTrack } from './topTracks'
+
 export interface Album {
   album_type: string
   total_tracks: number
@@ -20,19 +23,6 @@ export interface Album {
   popularity: number
 }
 
-export interface Artist {
-  external_urls: ExternalUrls
-  href: string
-  id: string
-  name: string
-  type: ArtistType
-  uri: string
-}
-
-export interface ExternalUrls {
-  spotify: string
-}
-
 export enum ArtistType {
   Artist = 'artist',
 }
@@ -42,16 +32,6 @@ export interface Copyright {
   type: string
 }
 
-export interface ExternalIDS {
-  upc: string
-}
-
-export interface Image {
-  url: string
-  height: number
-  width: number
-}
-
 export interface Tracks {
   href: string
   limit: number
@@ -59,24 +39,7 @@ export interface Tracks {
   offset: number
   previous: null
   total: number
-  items: Song[]
-}
-
-export interface Song {
-  artists: Artist[]
-  available_markets: string[]
-  disc_number: number
-  duration_ms: number
-  explicit: boolean
-  external_urls: ExternalUrls
-  href: string
-  id: string
-  name: string
-  preview_url: null
-  track_number: number
-  type: ItemType
-  uri: string
-  is_local: boolean
+  items: TopTrack[]
 }
 
 export enum ItemType {

@@ -1,3 +1,5 @@
+import type { ExternalUrls, Image } from './common'
+
 export interface Artist {
   external_urls: ExternalUrls
   followers: Followers
@@ -11,17 +13,7 @@ export interface Artist {
   uri: string
 }
 
-export interface ExternalUrls {
-  spotify: string
-}
-
 export interface Followers {
   href: null
   total: number
-}
-
-export interface Image {
-  url: string
-  height: number
-  width: number
 }

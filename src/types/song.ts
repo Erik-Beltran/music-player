@@ -1,3 +1,6 @@
+import type { Album } from './album'
+import type { Artist, ExternalUrls, Image } from './common'
+
 export interface Release {
   album_type: string
   artists: Artist[]
@@ -14,29 +17,11 @@ export interface Release {
   uri: string
 }
 
-export interface Artist {
-  external_urls: ExternalUrls
-  href: string
-  id: string
-  name: string
-  type: string
-  uri: string
-}
-
-export interface ExternalUrls {
-  spotify: string
-}
-
-export interface Image {
-  height: number
-  url: string
-  width: number
-}
-
 export interface BasedTrack {
   id: string
   name: string
   duration_ms: number
   artists: Artist[]
   images?: Image[]
+  album?: Album
 }

@@ -1,3 +1,5 @@
+import type { ExternalIDS, ExternalUrls, Image } from './common'
+
 export interface TopTrack {
   album: Album
   artists: ArtistElement[]
@@ -17,6 +19,7 @@ export interface TopTrack {
   track_number: number
   type: string
   uri: string
+  images?: Image[]
 }
 
 export interface Album {
@@ -43,18 +46,4 @@ export interface ArtistElement {
   name: string
   type: string
   uri: string
-}
-
-export interface ExternalUrls {
-  spotify: string
-}
-
-export interface Image {
-  url: string
-  height: number
-  width: number
-}
-
-export interface ExternalIDS {
-  isrc: string
 }
