@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import type { Song } from '@/types/album'
+import type { BasedTrack } from '@/types/song'
 import { formatTime } from '@/utils/formatter'
 import IconTime from '@icons/IconTime.vue'
 
 interface Props {
-  songs: Song[]
+  songs: BasedTrack[]
+  showArtist?: boolean
 }
 
-defineProps<Props>()
+withDefaults(defineProps<Props>(), {
+  showArtist: true,
+})
 </script>
 
 <template>
@@ -29,9 +32,21 @@ defineProps<Props>()
         {{ index + 1 }}
       </td>
       <td class="px-4 py-2 flex gap-3">
+        <picture v-if="song.images">
+          <img :src="song.images[0].url" :alt="song.name" class="w-11 h-11" />
+        </picture>
         <div class="flex flex-col">
           <h3 class="text-white text-base font-normal">{{ song.name }}</h3>
-          <span> {{ song.artists.map((artist) => artist.name).join(', ') }} </span>
+          <span v-if="showArtist" class="flex gap-x-2 flex-wrap">
+            <RouterLink
+              v-for="artist in song.artists"
+              :to="`/artist/${artist.id}`"
+              :key="artist.id"
+              class="mr-2 cursor-pointer hover:underline"
+            >
+              {{ artist.name }}
+            </RouterLink>
+          </span>
         </div>
       </td>
 

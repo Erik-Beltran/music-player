@@ -15,6 +15,12 @@ const router = createRouter({
       component: () => import('@/views/AlbumView.vue'),
       props: true,
     },
+    {
+      path: '/artist/:id',
+      name: 'Artist',
+      component: () => import('@/views/ArtistView.vue'),
+      props: true,
+    },
   ],
 })
 

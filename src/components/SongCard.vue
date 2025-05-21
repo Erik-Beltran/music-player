@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import CardPlayButton from '@components/CardPlayButton.vue'
+
 import type { Release } from '@/types/song'
-import CardPlayButton from './CardPlayButton.vue'
 
 interface Props {
   release: Release
@@ -27,8 +28,15 @@ defineProps<Props>()
       </picture>
       <div class="flex flex-auto flex-col px-2">
         <h4 class="font-medium text-white text-sm">{{ release.name }}</h4>
-        <p class="text-gray-400 text-xs">
-          {{ release.artists.map((artist) => artist.name).join(', ') }}
+        <p class="text-gray-400 text-xs flex gap-x-2 flex-wrap">
+          <RouterLink
+            v-for="artist in release.artists"
+            :to="`/artist/${artist.id}`"
+            :key="artist.id"
+            class="mr-2 cursor-pointer hover:underline"
+          >
+            {{ artist.name }}
+          </RouterLink>
         </p>
       </div>
     </RouterLink>

@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import CardPlayButton from '@components/CardPlayButton.vue'
+import SongsTable from '@components/SongsTable.vue'
+
 import type { Album } from '@/types/album'
-import AlbumTable from '@components/AlbumTable.vue'
-import CardPlayButton from './CardPlayButton.vue'
 
 interface Props {
   album: Album | undefined
@@ -36,7 +37,7 @@ defineProps<Props>()
               <p v-if="album.artists" class="text-white font-bold">
                 {{ album.artists.map((artist) => artist.name).join(', ') }} •
               </p>
-              <p class="mt-1">
+              <p>
                 <span v-if="album.total_tracks" class="text-white"
                   >{{ album.total_tracks }} songs</span
                 >, about 2 hr 25 min
@@ -50,7 +51,7 @@ defineProps<Props>()
       </div>
 
       <section class="lg:p-8 mt-2">
-        <AlbumTable :songs="album.tracks.items" :key="album.id" />
+        <SongsTable :songs="album.tracks.items" :key="album.id" />
       </section>
     </div>
     <!-- <div

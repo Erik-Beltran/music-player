@@ -32,3 +32,11 @@ export interface Image {
   url: string
   width: number
 }
+
+export interface BasedTrack {
+  id: string
+  name: string
+  duration_ms: number
+  artists: Artist[]
+  images?: Image[]
+}
