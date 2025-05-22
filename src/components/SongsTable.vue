@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import { usePlayerStore } from '@/stores/player'
 import type { TopTrack } from '@/types/topTracks'
 import { formatTime } from '@/utils/formatter'
 import IconTime from '@icons/IconTime.vue'
+import { computed } from 'vue'
+import IconPlay from './icons/IconPlay.vue'
+import PlayingVisualizer from './PlayingVisualizer.vue'
 
 interface Props {
   songs: TopTrack[]
@@ -13,6 +17,18 @@ withDefaults(defineProps<Props>(), {
   showArtist: true,
   showImage: false,
 })
+
+const playerStore = usePlayerStore()
+const currentSong = computed(() => playerStore.currentMusic.song)
+const isPlaying = computed(() => playerStore.isPlaying)
+
+const handleClick = (song: TopTrack) => {
+  playerStore.setCurrentMusic({
+    song,
+    album: song.album,
+  })
+  playerStore.setIsPlaying(true)
+}
 </script>
 
 <template>
@@ -28,10 +44,15 @@ withDefaults(defineProps<Props>(), {
     <tr
       v-for="(song, index) in songs"
       :key="index"
-      class="border-spacing-0 text-gray-300 text-sm font-light hover:bg-white/10 overflow-hidden transition duration-300"
+      :class="`group border-spacing-0 text-sm font-light hover:bg-white/10 overflow-hidden transition duration-300 ${currentSong?.id === song.id ? 'text-green-500' : 'text-white'}`"
+      @click="handleClick(song)"
     >
-      <td class="px-4 py-2 rounded-tl-lg rounded-bl-lg w-5 hidden lg:table-cell">
-        {{ index + 1 }}
+      <td class="px-4 py-2 rounded-tl-lg rounded-bl-lg w-5 hidden lg:table-cell relative">
+        <PlayingVisualizer v-if="isPlaying && song.id === currentSong?.id" />
+        <span v-else class="relative"> {{ index + 1 }}</span>
+        <IconPlay
+          class="absolute top-0 w-full inset-0 h-full p-3 z-50 bg-zinc-900 hidden group-hover:block"
+        />
       </td>
       <td class="px-4 py-2 flex gap-3">
         <picture v-if="showImage">
@@ -44,7 +65,7 @@ withDefaults(defineProps<Props>(), {
           <img v-if="song?.images" :src="song.images[0].url" :alt="song.name" class="w-11 h-11" />
         </picture>
         <div class="flex flex-col justify-center">
-          <h3 class="text-white text-base font-normal">{{ song.name }}</h3>
+          <h3 class="text-base font-normal">{{ song.name }}</h3>
           <span v-if="showArtist" class="flex gap-x-2 flex-wrap">
             <RouterLink
               v-for="artist in song.artists"
