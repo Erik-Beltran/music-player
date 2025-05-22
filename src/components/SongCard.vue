@@ -16,7 +16,7 @@ defineProps<Props>()
     <div
       class="absolute right-4 bottom-30 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 z-10 translate-y-4 opacity-0"
     >
-      <CardPlayButton class="text-4xl" />
+      <CardPlayButton class="text-4xl hidden lg:block" />
     </div>
 
     <RouterLink

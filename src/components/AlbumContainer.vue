@@ -10,11 +10,7 @@ interface Props {
 defineProps<Props>()
 </script>
 <template>
-  <div
-    v-if="album"
-    id="playlist-container"
-    class="relative bg-zinc-900 flex-col flex h-full overflow-x-hidden"
-  >
+  <div v-if="album" class="relative bg-zinc-900 flex-col flex h-full overflow-x-hidden">
     <div class="relative z-10 px-6 pt-10">
       <header class="flex lg:flex-row gap-8 px-6 pt-10 flex-col">
         <picture class="h-52 w-52 flex-none aspect-auto">
@@ -35,7 +31,15 @@ defineProps<Props>()
           <div class="flex-1 flex items-end">
             <div class="text-sm text-gray-300 flex gap-x-2">
               <p v-if="album.artists" class="text-white font-bold">
-                {{ album.artists.map((artist) => artist.name).join(', ') }} •
+                <RouterLink
+                  v-for="artist in album.artists"
+                  :to="`/artist/${artist.id}`"
+                  :key="artist.id"
+                  class="mr-2 cursor-pointer hover:underline"
+                >
+                  {{ artist.name }}
+                </RouterLink>
+                •
               </p>
               <p>
                 <span v-if="album.total_tracks" class="text-white"
@@ -50,7 +54,7 @@ defineProps<Props>()
         <CardPlayButton class="text-4xl" />
       </div>
 
-      <section class="lg:p-8 mt-2">
+      <section class="lg:p-8 mt-2 h-auto overflow-y-auto">
         <SongsTable :songs="album.tracks.items" :key="album.id" />
       </section>
     </div>

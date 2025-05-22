@@ -29,7 +29,7 @@ defineProps<Props>()
           />
         </picture>
 
-        <div class="flex flex-col justify-between">
+        <div class="flex flex-col justify-center gap-y-3">
           <h2 class="text-5xl font-bold block text-white">{{ artist.name }}</h2>
 
           <div class="text-sm text-gray-300 flex gap-x-2">
@@ -41,7 +41,7 @@ defineProps<Props>()
       </header>
 
       <div class="pl-6 pt-6">
-        <CardPlayButton class="text-4xl" />
+        <CardPlayButton />
       </div>
 
       <section class="lg:p-8 mt-2">
