@@ -49,7 +49,7 @@ const handleClick = (song: TopTrack) => {
     >
       <td class="px-4 py-2 rounded-tl-lg rounded-bl-lg w-5 hidden lg:table-cell relative">
         <PlayingVisualizer v-if="isPlaying && song.id === currentSong?.id" />
-        <span v-else class="relative"> {{ index + 1 }}</span>
+        <span v-else class="relative p-1"> {{ index + 1 }}</span>
         <IconPlay
           class="absolute top-0 w-full inset-0 h-full p-3 z-50 bg-zinc-900 hidden group-hover:block"
         />

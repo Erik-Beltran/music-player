@@ -1,51 +1,104 @@
 <template>
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    class="text-green-500"
-    xmlns="http://www.w3.org/2000/svg"
-    fill="currentColor"
-  >
-    <rect x="3" y="6" width="3" height="12">
+  <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1" y="6" width="2.8" height="12">
       <animate
-        attributeName="height"
-        values="12;4;12"
-        dur="1s"
-        repeatCount="indefinite"
-        begin="0s"
+        begin="spinner_Diec.begin+0.4s"
+        attributeName="y"
+        calcMode="spline"
+        dur="0.6s"
+        values="6;1;6"
+        keySplines=".14,.73,.34,1;.65,.26,.82,.45"
       />
-      <animate attributeName="y" values="6;14;6" dur="1s" repeatCount="indefinite" begin="0s" />
+      <animate
+        begin="spinner_Diec.begin+0.4s"
+        attributeName="height"
+        calcMode="spline"
+        dur="0.6s"
+        values="12;22;12"
+        keySplines=".14,.73,.34,1;.65,.26,.82,.45"
+      />
     </rect>
-    <rect x="8" y="6" width="3" height="12">
+    <rect x="5.8" y="6" width="2.8" height="12">
       <animate
-        attributeName="height"
-        values="12;8;12"
-        dur="1s"
-        repeatCount="indefinite"
-        begin="0.2s"
+        begin="spinner_Diec.begin+0.2s"
+        attributeName="y"
+        calcMode="spline"
+        dur="0.6s"
+        values="6;1;6"
+        keySplines=".14,.73,.34,1;.65,.26,.82,.45"
+        repeat-count="indefinite"
       />
-      <animate attributeName="y" values="6;10;6" dur="1s" repeatCount="indefinite" begin="0.2s" />
+      <animate
+        begin="spinner_Diec.begin+0.2s"
+        attributeName="height"
+        calcMode="spline"
+        dur="0.6s"
+        values="12;22;12"
+        keySplines=".14,.73,.34,1;.65,.26,.82,.45"
+        repeat-count="indefinite"
+      />
     </rect>
-    <rect x="13" y="6" width="3" height="12">
+    <rect x="10.6" y="6" width="2.8" height="12">
       <animate
-        attributeName="height"
-        values="12;6;12"
-        dur="1s"
-        repeatCount="indefinite"
-        begin="0.4s"
+        id="spinner_Diec"
+        begin="0;spinner_dm8s.end-0.1s"
+        attributeName="y"
+        calcMode="spline"
+        dur="0.6s"
+        values="6;1;6"
+        keySplines=".14,.73,.34,1;.65,.26,.82,.45"
+        repeat-count="indefinite"
       />
-      <animate attributeName="y" values="6;12;6" dur="1s" repeatCount="indefinite" begin="0.4s" />
+      <animate
+        begin="0;spinner_dm8s.end-0.1s"
+        attributeName="height"
+        calcMode="spline"
+        dur="0.6s"
+        values="12;22;12"
+        keySplines=".14,.73,.34,1;.65,.26,.82,.45"
+        repeat-count="indefinite"
+      />
     </rect>
-    <rect x="18" y="6" width="3" height="12">
+    <rect x="15.4" y="6" width="2.8" height="12">
       <animate
-        attributeName="height"
-        values="12;9;12"
-        dur="1s"
-        repeatCount="indefinite"
-        begin="0.6s"
+        begin="spinner_Diec.begin+0.2s"
+        attributeName="y"
+        calcMode="spline"
+        dur="0.6s"
+        values="6;1;6"
+        keySplines=".14,.73,.34,1;.65,.26,.82,.45"
+        repeat-count="indefinite"
       />
-      <animate attributeName="y" values="6;9;6" dur="1s" repeatCount="indefinite" begin="0.6s" />
+      <animate
+        begin="spinner_Diec.begin+0.2s"
+        attributeName="height"
+        calcMode="spline"
+        dur="0.6s"
+        values="12;22;12"
+        keySplines=".14,.73,.34,1;.65,.26,.82,.45"
+        repeat-count="indefinite"
+      />
+    </rect>
+    <rect x="20.2" y="6" width="2.8" height="12">
+      <animate
+        id="spinner_dm8s"
+        begin="spinner_Diec.begin+0.4s"
+        attributeName="y"
+        calcMode="spline"
+        dur="0.6s"
+        values="6;1;6"
+        keySplines=".14,.73,.34,1;.65,.26,.82,.45"
+        repeat-count="indefinite"
+      />
+      <animate
+        begin="spinner_Diec.begin+0.4s"
+        attributeName="height"
+        calcMode="spline"
+        dur="0.6s"
+        values="12;22;12"
+        keySplines=".14,.73,.34,1;.65,.26,.82,.45"
+        repeat-count="indefinite"
+      />
     </rect>
   </svg>
 </template>
