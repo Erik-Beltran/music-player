@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 import { usePlayerStore } from '@/stores/player'
 
@@ -11,16 +11,22 @@ import IconVolumeDown from '@icons/IconVolumeDown.vue'
 import IconVolumeUp from '@icons/IconVolumeUp.vue'
 import IconPause from '@icons/IconPause.vue'
 import IconPlay from '@icons/IconPlay.vue'
+import { getRandomSong } from '@/utils/music'
+import { storeToRefs } from 'pinia'
+import { formatAudioTime } from '@/utils/formatter'
 
 const playerStore = usePlayerStore()
 const currentSong = computed(() => playerStore.currentMusic.song)
-const isPlaying = computed(() => playerStore.isPlaying)
+const { isPlaying } = storeToRefs(playerStore)
+const audioSrc = ref('')
 
 const volumeRef = ref(100)
 const previousVolumeRef = ref(100)
+const duration = ref<number | string>(0)
+const currentTime = ref(0)
+const isReadyToPlay = ref(false)
 
 const audioElement = ref<HTMLAudioElement | null>(null)
-
 const handleClickVolume = () => {
   const isVolumeSilenced = volumeRef.value == 0
 
@@ -31,6 +37,46 @@ const handleClickVolume = () => {
   }
 }
 
+const playAudio = () => {
+  if (audioElement.value && isReadyToPlay.value && isPlaying.value) {
+    audioElement.value.play()
+  }
+}
+
+const pauseAudio = () => {
+  if (audioElement.value) {
+    audioElement.value.pause()
+  }
+}
+const onLoadedMetadata = () => {
+  if (audioElement.value) {
+    duration.value = audioElement.value.duration
+  }
+}
+
+const handleTimeUpdate = () => {
+  if (audioElement.value) {
+    currentTime.value = audioElement.value.currentTime
+  }
+}
+
+const onCanPlay = () => {
+  isReadyToPlay.value = true
+  playAudio()
+}
+
+onMounted(() => {
+  if (audioElement.value) {
+    audioElement.value.addEventListener('timeupdate', handleTimeUpdate)
+  }
+})
+
+onBeforeUnmount(() => {
+  if (audioElement.value) {
+    audioElement.value.removeEventListener('timeupdate', handleTimeUpdate)
+  }
+})
+
 watch(
   () => volumeRef.value,
   (newValue, oldValue) => {
@@ -40,20 +86,58 @@ watch(
     }
   },
 )
+
+watch(currentSong, (newValue) => {
+  if (newValue) {
+    console.log('into watch')
+    const index = getRandomSong()
+    audioSrc.value = `/songs/0${index}.mp3`
+    isReadyToPlay.value = false
+    if (audioElement.value) {
+      audioElement.value.load()
+    }
+  }
+})
+
+watch(isPlaying, (newValue) => {
+  if (newValue) {
+    playAudio()
+  } else {
+    pauseAudio()
+  }
+})
+
+const onSliderChange = (value: number) => {
+  if (audioElement.value) {
+    audioElement.value.currentTime = value
+  }
+}
 </script>
 
 <template>
-  <div v-if="currentSong" class="grid grid-cols-[1fr_auto] lg:grid-cols-[350px_1fr_350px] mt-4">
+  <div
+    v-if="currentSong"
+    class="grid grid-cols-[1fr_auto] lg:grid-cols-[350px_1fr_350px] mt-4 py-6"
+  >
     <CurrentSongCard class="px-2" />
 
-    <div className="flex justify-center gap-4 lg:flex-1 p-4  ">
+    <div className="flex justify-center flex-col items-center">
       <button
         @click="playerStore.setIsPlaying(!isPlaying)"
         class="rounded-full bg-white text-black cursor-pointer p-2"
       >
-        <IconPlay v-if="isPlaying" />
-        <IconPause v-else />
+        <IconPause v-if="isPlaying" />
+        <IconPlay v-else />
       </button>
+      <div className="hidden lg:flex gap-x-3 text-xs pt-2 items-center  w-full justify-center">
+        <span>{{ formatAudioTime(currentTime) }}</span>
+
+        <div class="w-[70%] max-w-[400px]" @mouseup="onSliderChange(currentTime)">
+          <SliderContiner v-model="currentTime" :max="duration" />
+        </div>
+
+        <span v-if="duration">{{ formatAudioTime(Number(duration)) }}</span>
+      </div>
     </div>
 
     <div class="hidden lg:flex justify-center items-center gap-x-1 px-4">
@@ -62,10 +146,16 @@ watch(
         <IconVolumeDown v-else-if="volumeRef <= 75" />
         <IconVolumeUp v-else />
       </button>
+
       <div class="w-[70%]">
         <SliderContiner v-model="volumeRef" :max="100" />
       </div>
     </div>
   </div>
-  <audio ref="audioElement"></audio>
+  <audio
+    ref="audioElement"
+    :src="audioSrc"
+    @loadedmetadata="onLoadedMetadata"
+    :oncanplay="onCanPlay"
+  ></audio>
 </template>

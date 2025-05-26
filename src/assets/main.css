@@ -17,6 +17,10 @@
   overflow-y: auto;
 }
 
+#app input[type='range'] {
+  outline: none;
+}
+
 @media (max-width: 1024px) {
   #app {
     grid-template-areas:
