@@ -51,7 +51,7 @@ defineProps<Props>()
         </div>
       </header>
       <div class="pl-6 pt-6">
-        <CardPlayButton class="text-4xl" />
+        <CardPlayButton class="text-4xl" :id="album.id" />
       </div>
 
       <section class="lg:p-8 mt-2 h-auto overflow-y-auto">

@@ -15,6 +15,19 @@ export async function getNewReleases() {
   }
 }
 
+export async function getTrackAlbum(id: string | string[]): Promise<TopTrack> {
+  try {
+    const response = await axiosInstance.get(`/albums/${id}/tracks`, {
+      params: {
+        limit: 1,
+      },
+    })
+    return response.data.items[0]
+  } catch (error) {
+    console.error('Error fetching new releases:', error)
+    throw error
+  }
+}
 export async function getAlbum(id: string | string[]): Promise<Album> {
   try {
     const response = await axiosInstance.get(`/albums/${id}`)
@@ -45,7 +58,7 @@ export async function getArtistTopTracks(id: string | string[]): Promise<TopTrac
         id: track.id,
         duration_ms: track.duration_ms,
         artists: track.artists,
-        images: track.album.images,
+        images: track.album?.images,
       }
     })
   } catch (error) {

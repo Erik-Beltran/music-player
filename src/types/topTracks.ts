@@ -1,20 +1,20 @@
 import type { ExternalIDS, ExternalUrls, Image } from './common'
 
 export interface TopTrack {
-  album: Album
+  album?: Album
   artists: ArtistElement[]
   available_markets: string[]
   disc_number: number
   duration_ms: number
   explicit: boolean
-  external_ids: ExternalIDS
+  external_ids?: ExternalIDS
   external_urls: ExternalUrls
   href: string
   id: string
   is_local: boolean
-  is_playable: boolean
+  is_playable?: boolean
   name: string
-  popularity: number
+  popularity?: number
   preview_url: null
   track_number: number
   type: string
@@ -30,7 +30,7 @@ export interface Album {
   href: string
   id: string
   images: Image[]
-  is_playable: boolean
+  is_playable?: boolean
   name: string
   release_date: Date
   release_date_precision: string

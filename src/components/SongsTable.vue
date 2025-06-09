@@ -3,7 +3,7 @@ import { usePlayerStore } from '@/stores/player'
 import type { TopTrack } from '@/types/topTracks'
 import { formatTime } from '@/utils/formatter'
 import IconTime from '@icons/IconTime.vue'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import IconPlay from './icons/IconPlay.vue'
 import PlayingVisualizer from './PlayingVisualizer.vue'
 
@@ -20,12 +20,22 @@ withDefaults(defineProps<Props>(), {
 
 const playerStore = usePlayerStore()
 const currentSong = computed(() => playerStore.currentMusic.song)
+
 const isPlaying = computed(() => playerStore.isPlaying)
+
+const isMobile = ref(window.innerWidth < 1024)
 
 const handleClick = (song: TopTrack) => {
   playerStore.setCurrentMusic({
-    song,
-    album: song.album,
+    song: {
+      ...song,
+      images: song.images
+        ? song.images
+        : song.album?.images
+          ? song.album.images
+          : currentSong.value?.images,
+    },
+    album: song.album || null,
   })
   playerStore.setIsPlaying(true)
 }
@@ -45,13 +55,14 @@ const handleClick = (song: TopTrack) => {
       v-for="(song, index) in songs"
       :key="index"
       :class="`group border-spacing-0 text-sm font-light hover:bg-white/10 overflow-hidden transition duration-300 ${currentSong?.id === song.id ? 'text-green-500' : 'text-white'}`"
-      @click="handleClick(song)"
+      @click="isMobile && handleClick(song)"
     >
       <td class="px-4 py-2 rounded-tl-lg rounded-bl-lg w-5 hidden lg:table-cell relative">
         <PlayingVisualizer v-if="isPlaying && song.id === currentSong?.id" />
         <span v-else class="relative p-1"> {{ index + 1 }}</span>
         <IconPlay
-          class="absolute top-0 w-full inset-0 h-full p-3 z-50 bg-zinc-900 hidden group-hover:block"
+          @click="handleClick(song)"
+          class="absolute top-0 w-full inset-0 h-full p-3 z-50 bg-zinc-900 hidden group-hover:block cursor-pointer"
         />
       </td>
       <td class="px-4 py-2 flex gap-3">
@@ -60,22 +71,25 @@ const handleClick = (song: TopTrack) => {
             v-if="song.album?.images"
             :src="song.album.images[0].url"
             :alt="song.name"
-            class="w-11 h-11"
+            class="w-11 h-11 object-cover"
           />
           <img v-if="song?.images" :src="song.images[0].url" :alt="song.name" class="w-11 h-11" />
         </picture>
         <div class="flex flex-col justify-center">
           <h3 class="text-base font-normal">{{ song.name }}</h3>
-          <span v-if="showArtist" class="flex gap-x-2 flex-wrap">
-            <RouterLink
-              v-for="artist in song.artists"
-              :to="`/artist/${artist.id}`"
+
+          <div>
+            <span
+              v-for="(artist, index) in song?.artists"
               :key="artist.id"
-              class="mr-2 cursor-pointer hover:underline"
+              class="text-gray-400 text-[11px] mr-1"
             >
-              {{ artist.name }}
-            </RouterLink>
-          </span>
+              <RouterLink :to="`/artist/${artist.id}`" class="cursor-pointer hover:underline">
+                {{ artist.name }}
+              </RouterLink>
+              <span v-if="currentSong?.artists && index !== song?.artists.length - 1">, </span>
+            </span>
+          </div>
         </div>
       </td>
 

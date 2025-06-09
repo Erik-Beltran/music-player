@@ -43,7 +43,11 @@ onBeforeUnmount(() => {
       v-if="currentSong?.images"
       className="w-16 h-16 bg-zinc-800 rounded-md shadow-lg overflow-hidden"
     >
-      <img :src="currentSong?.images[0].url" alt="album cover" />
+      <img
+        :src="currentSong?.images[0].url"
+        alt="album cover"
+        class="h-full object-cover object-center"
+      />
     </picture>
 
     <div className="flex flex-col  flex-1 overflow-hidden whitespace-nowrap">
