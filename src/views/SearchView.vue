@@ -39,10 +39,12 @@ watch(
       <div class="flex flex-col gap-y-2">
         <h2 class="text-2xl font-bold">Top Result</h2>
         <TopResultCard
+          v-if="items.tracks[0]"
           :name="items.tracks[0].name"
-          :image="items.tracks[0].album.images[0].url"
+          :image="items.tracks[0].album ? items.tracks[0].album.images[0].url : ''"
           :id="items.tracks[0].id"
           :artists="items.tracks[0].artists"
+          :song="items.tracks[0]"
         />
       </div>
       <div class="w-[60%]">

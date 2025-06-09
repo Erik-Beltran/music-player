@@ -3,21 +3,32 @@ import { usePlayerStore } from '@/stores/player'
 import IconPlay from '@icons/IconPlay.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import IconPause from './icons/IconPause.vue'
+import type { TopTrack } from '@/types/topTracks'
 
 const props = defineProps<{
   id?: string | string[]
+  song?: TopTrack
+  isTopResult?: boolean
 }>()
-const { id } = props
+const { id, isTopResult, song } = props
 
 const displayedId = ref(id)
 const isPlayingPlayList = ref(false)
 
 const playerStore = usePlayerStore()
+
 const isPlaying = computed(() => playerStore.isPlaying)
 const currentAlbum = computed(() => playerStore.currentMusic.album)
 
 const handleClick = () => {
   playerStore.setIsPlaying(!isPlayingPlayList.value)
+
+  if (isTopResult && song) {
+    playerStore.setCurrentMusic({
+      song: { ...song, images: song.album?.images },
+      album: song.album || null,
+    })
+  }
 }
 
 watch(currentAlbum, (newValue) => {
@@ -37,7 +48,9 @@ watch(isPlaying, (newValue) => {
 })
 
 onMounted(() => {
-  isPlayingPlayList.value = currentAlbum.value?.id === displayedId.value
+  if (currentAlbum.value && displayedId.value) {
+    isPlayingPlayList.value = currentAlbum.value?.id === displayedId.value
+  }
 })
 </script>
 

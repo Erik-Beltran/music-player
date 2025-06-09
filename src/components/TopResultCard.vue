@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import type { Artist } from '@/types/common'
+import type { TopTrack } from '@/types/topTracks'
 import CardPlayButton from '@components/CardPlayButton.vue'
 
 interface Props {
-  name: string
-  artists: Artist[]
-  image: string
-  id: string
+  song: TopTrack
 }
-defineProps<Props>()
+const props = defineProps<Props>()
+
+const { name, artists, id, album } = props.song
+const image = album && album.images?.[0]?.url
 </script>
 
 <template>
@@ -18,11 +18,12 @@ defineProps<Props>()
     <div
       class="absolute right-4 bottom-5 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 z-10 translate-y-4 opacity-0"
     >
-      <CardPlayButton class="text-3xl" />
+      <CardPlayButton class="text-3xl" :id="id" :song="song" :is-top-result="true" />
     </div>
     <picture v-if="image">
       <img :src="image" :alt="name" class="w-20 h-20" />
     </picture>
+
     <div>
       <h3 class="font-bold text-4xl">{{ name }}</h3>
       <span class="text-gray-400 text-xs flex gap-x-2 flex-wrap">
