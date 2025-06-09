@@ -89,7 +89,6 @@ watch(
 
 watch(currentSong, (newValue) => {
   if (newValue) {
-    console.log('into watch')
     const index = getRandomSong()
     audioSrc.value = `/songs/0${index}.mp3`
     isReadyToPlay.value = false
@@ -117,11 +116,11 @@ const onSliderChange = (value: number) => {
 <template>
   <div
     v-if="currentSong"
-    class="grid grid-cols-[1fr_auto] lg:grid-cols-[350px_1fr_350px] mt-4 py-6"
+    class="grid grid-cols-[1fr_auto] lg:grid-cols-[350px_1fr_350px] mt-4 py-6 max-lg:px-6"
   >
     <CurrentSongCard class="px-2" />
 
-    <div className="flex justify-center flex-col items-center">
+    <div className="flex justify-center flex-col items-center ">
       <button
         @click="playerStore.setIsPlaying(!isPlaying)"
         class="rounded-full bg-white text-black cursor-pointer p-2"

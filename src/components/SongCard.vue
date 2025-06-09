@@ -2,21 +2,49 @@
 import CardPlayButton from '@components/CardPlayButton.vue'
 
 import type { Release } from '@/types/song'
+import { getTrackAlbum } from '@/services/spotifyApi'
+import { usePlayerStore } from '@/stores/player'
+import { computed, onMounted, ref, watch } from 'vue'
 
 interface Props {
   release: Release
 }
-defineProps<Props>()
+const props = defineProps<Props>()
+const { release } = props
+
+const playerStore = usePlayerStore()
+const currentAlbum = computed(() => playerStore.currentMusic.album)
+const activeItem = ref(false)
+
+const onClick = async () => {
+  if (currentAlbum.value?.id !== release.id) {
+    const result = await getTrackAlbum(release.id)
+
+    playerStore.setCurrentMusic({
+      song: { ...result, images: release.images },
+      album: release,
+    })
+  }
+}
+
+watch(currentAlbum, (newValue) => {
+  activeItem.value = newValue?.id === release.id
+})
+
+onMounted(() => {
+  activeItem.value = currentAlbum.value?.id === release.id
+})
 </script>
 
 <template>
   <article
+    @click="onClick"
     class="group relative hover:bg-zinc-800 shadow-lg hover:shadow-xl rounded-md ransi transition-all duration-300"
   >
     <div
-      class="absolute right-4 bottom-30 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 z-10 translate-y-4 opacity-0"
+      :class="`absolute right-4 bottom-20  transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 z-10 ${activeItem ? 'opacity-100 translate-y-0' : 'translate-y-4 opacity-0 '}`"
     >
-      <CardPlayButton class="text-4xl hidden lg:block" />
+      <CardPlayButton class="text-4xl hidden lg:block" :id="release.id" />
     </div>
 
     <RouterLink
