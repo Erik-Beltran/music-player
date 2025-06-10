@@ -13,7 +13,8 @@ import IconPause from '@icons/IconPause.vue'
 import IconPlay from '@icons/IconPlay.vue'
 import { getRandomSong } from '@/utils/music'
 import { storeToRefs } from 'pinia'
-import { formatAudioTime } from '@/utils/formatter'
+import PlayerModalMobile from './PlayerModalMobile.vue'
+import TimeControls from './TimeControls.vue'
 
 const playerStore = usePlayerStore()
 const currentSong = computed(() => playerStore.currentMusic.song)
@@ -27,6 +28,15 @@ const currentTime = ref(0)
 const isReadyToPlay = ref(false)
 
 const audioElement = ref<HTMLAudioElement | null>(null)
+
+const isMobileModalOpen = ref(false)
+
+function openModalIfMobile() {
+  if (window.innerWidth < 1024) {
+    isMobileModalOpen.value = true
+  }
+}
+
 const handleClickVolume = () => {
   const isVolumeSilenced = volumeRef.value == 0
 
@@ -116,9 +126,17 @@ const onSliderChange = (value: number) => {
 <template>
   <div
     v-if="currentSong"
-    class="grid grid-cols-[1fr_auto] lg:grid-cols-[350px_1fr_350px] mt-4 py-3 lg:py-6 max-lg:px-6 max-lg:relative"
+    class="grid grid-cols-[1fr_auto] lg:grid-cols-[350px_1fr_350px] mt-4 py-3 lg:py-6 max-lg:px-6 max-lg:relative overflow-hidden"
   >
-    <CurrentSongCard class="px-2" />
+    <PlayerModalMobile
+      :open="isMobileModalOpen"
+      :duration="Number(duration) || 0"
+      :currentTime="currentTime || 0"
+      @close="isMobileModalOpen = false"
+      @update:currentTime="onSliderChange"
+    />
+
+    <CurrentSongCard class="px-2" @click="openModalIfMobile" />
 
     <div className="flex justify-center flex-col items-center ">
       <button
@@ -128,17 +146,15 @@ const onSliderChange = (value: number) => {
         <IconPause v-if="isPlaying" />
         <IconPlay v-else />
       </button>
-      <div className="flex gap-x-3 text-xs pt-2 items-center  w-full justify-center">
-        <span class="hidden lg:block">{{ formatAudioTime(currentTime) }}</span>
 
-        <div
-          class="lg:w-[70%] lg:max-w-[400px] max-lg:absolute bottom-0 left-2 right-2"
-          @mouseup="onSliderChange(currentTime)"
-        >
-          <SliderContiner v-model="currentTime" :max="duration" />
-        </div>
-
-        <span v-if="duration" class="hidden lg:block">{{ formatAudioTime(Number(duration)) }}</span>
+      <div
+        class="max-lg:absolute max-lg:-bottom-2.5 max-lg:-right-7 max-lg:-left-7 lg:flex lg:w-full"
+      >
+        <TimeControls
+          :currentTime="currentTime"
+          :duration="Number(duration ?? 0)"
+          @update:currentTime="onSliderChange"
+        />
       </div>
     </div>
 
