@@ -3,7 +3,7 @@ import { usePlayerStore } from '@/stores/player'
 import type { TopTrack } from '@/types/topTracks'
 import { formatTime } from '@/utils/formatter'
 import IconTime from '@icons/IconTime.vue'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import IconPlay from './icons/IconPlay.vue'
 import PlayingVisualizer from './PlayingVisualizer.vue'
 
@@ -22,8 +22,6 @@ const playerStore = usePlayerStore()
 const currentSong = computed(() => playerStore.currentMusic.song)
 
 const isPlaying = computed(() => playerStore.isPlaying)
-
-const isMobile = ref(window.innerWidth < 1024)
 
 const handleClick = (song: TopTrack) => {
   playerStore.setCurrentMusic({
@@ -55,7 +53,7 @@ const handleClick = (song: TopTrack) => {
       v-for="(song, index) in songs"
       :key="index"
       :class="`group border-spacing-0 text-sm font-light hover:bg-white/10 overflow-hidden transition duration-300 ${currentSong?.id === song.id ? 'text-green-500' : 'text-white'}`"
-      @click="isMobile && handleClick(song)"
+      @click="handleClick(song)"
     >
       <td class="px-4 py-2 rounded-tl-lg rounded-bl-lg w-5 hidden lg:table-cell relative">
         <PlayingVisualizer v-if="isPlaying && song.id === currentSong?.id" />
@@ -75,10 +73,10 @@ const handleClick = (song: TopTrack) => {
           />
           <img v-if="song?.images" :src="song.images[0].url" :alt="song.name" class="w-11 h-11" />
         </picture>
-        <div class="flex flex-col justify-center">
+        <div class="flex flex-col justify-center flex-1">
           <h3 class="text-base font-normal">{{ song.name }}</h3>
 
-          <div>
+          <div class="hidden lg:block">
             <span
               v-for="(artist, index) in song?.artists"
               :key="artist.id"

@@ -36,7 +36,7 @@ watch(
 <template>
   <main class="[grid-area:main] rounded-lg bg-zinc-900 overflow-y-auto w-full p-6">
     <section v-if="items?.tracks" class="mb-10 flex justify-between gap-5 flex-col lg:flex-row">
-      <div class="flex flex-col gap-y-2">
+      <div class="flex flex-col gap-y-2 flex-1">
         <h2 class="text-2xl font-bold">Top Result</h2>
         <TopResultCard
           v-if="items.tracks[0]"
@@ -47,7 +47,7 @@ watch(
           :song="items.tracks[0]"
         />
       </div>
-      <div class="w-[60%]">
+      <div class="lg:w-[60%]">
         <h2 class="text-2xl font-bold">Songs</h2>
         <SongsTable :songs="items.tracks" :show-artist="true" :show-image="true" />
       </div>

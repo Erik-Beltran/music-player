@@ -116,7 +116,7 @@ const onSliderChange = (value: number) => {
 <template>
   <div
     v-if="currentSong"
-    class="grid grid-cols-[1fr_auto] lg:grid-cols-[350px_1fr_350px] mt-4 py-6 max-lg:px-6"
+    class="grid grid-cols-[1fr_auto] lg:grid-cols-[350px_1fr_350px] mt-4 py-3 lg:py-6 max-lg:px-6 max-lg:relative"
   >
     <CurrentSongCard class="px-2" />
 
@@ -128,14 +128,17 @@ const onSliderChange = (value: number) => {
         <IconPause v-if="isPlaying" />
         <IconPlay v-else />
       </button>
-      <div className="hidden lg:flex gap-x-3 text-xs pt-2 items-center  w-full justify-center">
-        <span>{{ formatAudioTime(currentTime) }}</span>
+      <div className="flex gap-x-3 text-xs pt-2 items-center  w-full justify-center">
+        <span class="hidden lg:block">{{ formatAudioTime(currentTime) }}</span>
 
-        <div class="w-[70%] max-w-[400px]" @mouseup="onSliderChange(currentTime)">
+        <div
+          class="lg:w-[70%] lg:max-w-[400px] max-lg:absolute bottom-0 left-2 right-2"
+          @mouseup="onSliderChange(currentTime)"
+        >
           <SliderContiner v-model="currentTime" :max="duration" />
         </div>
 
-        <span v-if="duration">{{ formatAudioTime(Number(duration)) }}</span>
+        <span v-if="duration" class="hidden lg:block">{{ formatAudioTime(Number(duration)) }}</span>
       </div>
     </div>
 

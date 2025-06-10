@@ -28,7 +28,7 @@ const updateValue = (event: Event) => {
 <template>
   <input
     type="range"
-    class="rounded-lg w-full h-2 accent-white outline-0 cursor-pointer hover:accent-green-500"
+    class="rounded-lg w-full h-0.5 lg:h-2 accent-white outline-0 cursor-pointer hover:accent-green-500"
     :max="max"
     min="0"
     :value="modelValue"
