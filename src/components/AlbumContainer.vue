@@ -3,11 +3,30 @@ import CardPlayButton from '@components/CardPlayButton.vue'
 import SongsTable from '@components/SongsTable.vue'
 
 import type { Album } from '@/types/album'
+import { ref, watch } from 'vue'
+import { useDominantColor } from '@/composables/useImageColor'
 
 interface Props {
   album: Album | undefined
 }
-defineProps<Props>()
+const props = defineProps<Props>()
+
+const dominantColor = ref('#18181b')
+const { getDominantColor } = useDominantColor()
+
+async function updateDominantColor() {
+  if (props.album?.images?.[0]?.url) {
+    dominantColor.value = await getDominantColor(props.album.images[0].url)
+  }
+}
+
+watch(
+  () => props.album?.images?.[0]?.url,
+  () => {
+    updateDominantColor()
+  },
+  { immediate: true },
+)
 </script>
 <template>
   <div v-if="album" class="relative bg-zinc-900 flex-col flex h-full overflow-x-hidden">
@@ -58,9 +77,9 @@ defineProps<Props>()
         <SongsTable :songs="album.tracks.items" :key="album.id" />
       </section>
     </div>
-    <!-- <div
-      :style="`background: linear-gradient(to bottom, ${darkColor} 10%, #18181b 60%);`"
+    <div
+      :style="`background: linear-gradient(to bottom, ${dominantColor} 10%, #18181b 60%);`"
       class="absolute inset-0 via-zinc-900/80"
-    ></div> -->
+    ></div>
   </div>
 </template>

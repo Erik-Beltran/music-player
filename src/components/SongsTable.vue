@@ -37,6 +37,13 @@ const handleClick = (song: TopTrack) => {
   })
   playerStore.setIsPlaying(true)
 }
+
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  })
+}
 </script>
 
 <template>
@@ -82,7 +89,11 @@ const handleClick = (song: TopTrack) => {
               :key="artist.id"
               class="text-gray-400 text-[11px] mr-1"
             >
-              <RouterLink :to="`/artist/${artist.id}`" class="cursor-pointer hover:underline">
+              <RouterLink
+                :to="`/artist/${artist.id}`"
+                class="cursor-pointer hover:underline"
+                @click.stop="scrollToTop"
+              >
                 {{ artist.name }}
               </RouterLink>
               <span v-if="currentSong?.artists && index !== song?.artists.length - 1">, </span>

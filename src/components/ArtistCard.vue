@@ -13,7 +13,7 @@ defineProps<Props>()
     class="relative hover:bg-zinc-800 shadow-lg hover:shadow-xl rounded-md ransi transition-all duration-300"
   >
     <RouterLink
-      :to="`/album/${artist.id}`"
+      :to="`/artist/${artist.id}`"
       class="playlist-item transition-all duration-300 flex relative p-2 overflow-hidden gap-2 pb-6 rounded-md w-44 flex-col"
     >
       <picture class="h-auto w-full flex-none">

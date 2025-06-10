@@ -15,24 +15,37 @@ import { getRandomSong } from '@/utils/music'
 import { storeToRefs } from 'pinia'
 import PlayerModalMobile from './PlayerModalMobile.vue'
 import TimeControls from './TimeControls.vue'
+import { useDominantColor } from '@/composables/useImageColor'
 
+const { getDominantColor } = useDominantColor()
 const playerStore = usePlayerStore()
+
 const currentSong = computed(() => playerStore.currentMusic.song)
 const { isPlaying } = storeToRefs(playerStore)
 const audioSrc = ref('')
-
 const volumeRef = ref(100)
 const previousVolumeRef = ref(100)
 const duration = ref<number | string>(0)
 const currentTime = ref(0)
 const isReadyToPlay = ref(false)
-
 const audioElement = ref<HTMLAudioElement | null>(null)
-
 const isMobileModalOpen = ref(false)
+const dominantColor = ref('#18181b')
+
+const isMobile = ref(window.innerWidth < 1024)
+
+const updateMobileStatus = () => {
+  isMobile.value = window.innerWidth < 1024
+}
+
+// const backgroundStyle = computed(() => {
+//   return isMobile.value
+//     ? `background: linear-gradient(to bottom, ${dominantColor.value} 10%, #18181b 60%);`
+//     : 'background: none;'
+// })
 
 function openModalIfMobile() {
-  if (window.innerWidth < 1024) {
+  if (isMobile.value) {
     isMobileModalOpen.value = true
   }
 }
@@ -75,16 +88,28 @@ const onCanPlay = () => {
   playAudio()
 }
 
+async function updateDominantColor() {
+  const imageUrl = currentSong.value?.images?.[0]?.url
+
+  if (imageUrl) {
+    dominantColor.value = await getDominantColor(imageUrl)
+  }
+}
+
 onMounted(() => {
   if (audioElement.value) {
     audioElement.value.addEventListener('timeupdate', handleTimeUpdate)
   }
+
+  updateDominantColor()
+  window.addEventListener('resize', updateMobileStatus)
 })
 
 onBeforeUnmount(() => {
   if (audioElement.value) {
     audioElement.value.removeEventListener('timeupdate', handleTimeUpdate)
   }
+  window.removeEventListener('resize', updateMobileStatus)
 })
 
 watch(
@@ -102,17 +127,11 @@ watch(currentSong, (newValue) => {
     const index = getRandomSong()
     audioSrc.value = `/songs/0${index}.mp3`
     isReadyToPlay.value = false
+    updateDominantColor()
+
     if (audioElement.value) {
       audioElement.value.load()
     }
-  }
-})
-
-watch(isPlaying, (newValue) => {
-  if (newValue) {
-    playAudio()
-  } else {
-    pauseAudio()
   }
 })
 
@@ -121,17 +140,29 @@ const onSliderChange = (value: number) => {
     audioElement.value.currentTime = value
   }
 }
+
+watch(isPlaying, (newValue) => {
+  if (newValue) {
+    playAudio()
+  } else {
+    pauseAudio()
+  }
+})
 </script>
 
 <template>
   <div
     v-if="currentSong"
     class="grid grid-cols-[1fr_auto] lg:grid-cols-[350px_1fr_350px] mt-4 py-3 lg:py-6 max-lg:px-6 max-lg:relative overflow-hidden"
+    :style="
+      isMobile && `background: linear-gradient(to bottom, ${dominantColor} 10%, #18181b 60%);`
+    "
   >
     <PlayerModalMobile
       :open="isMobileModalOpen"
       :duration="Number(duration) || 0"
       :currentTime="currentTime || 0"
+      :dominantColor="dominantColor"
       @close="isMobileModalOpen = false"
       @update:currentTime="onSliderChange"
     />

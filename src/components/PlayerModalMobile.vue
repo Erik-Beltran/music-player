@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, defineEmits, computed, watch } from 'vue'
+import { defineEmits, computed, watch } from 'vue'
 import { usePlayerStore } from '@/stores/player'
 
 import TimeControls from './TimeControls.vue'
@@ -10,6 +10,7 @@ const props = defineProps<{
   open: boolean
   duration: number
   currentTime: number
+  dominantColor: string
 }>()
 const playerStore = usePlayerStore()
 
@@ -38,9 +39,10 @@ function updateTime(value: number) {
 <template>
   <div
     v-if="props.open"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black lg:hidden"
+    class="fixed inset-0 z-50 flex items-center justify-center lg:hidden"
+    :style="`background: linear-gradient(to bottom, ${dominantColor} 50%, #18181b  );`"
   >
-    <div class="bg-black rounded p-6 shadow-lg w-full h-full flex flex-col pb-20">
+    <div class="rounded p-6 shadow-lg w-full h-full flex flex-col pb-20">
       <button class="mt-4 text-sm text-white underline" @click.stop="closeModal">
         <ArrowDown class="w-6 h-6" />
       </button>
