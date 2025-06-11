@@ -96,7 +96,7 @@ function scrollToTop() {
               >
                 {{ artist.name }}
               </RouterLink>
-              <span v-if="currentSong?.artists && index !== song?.artists.length - 1">, </span>
+              <span v-if="song?.artists && index !== song?.artists.length - 1">, </span>
             </span>
           </div>
         </div>

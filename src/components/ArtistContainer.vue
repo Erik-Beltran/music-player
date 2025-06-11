@@ -10,7 +10,7 @@ import { useDominantColor } from '@/composables/useImageColor'
 
 interface Props {
   artist: Artist | undefined
-  topTracks: TopTrack[] | []
+  topTracks: TopTrack[] | [] | undefined
 }
 const props = defineProps<Props>()
 
@@ -65,7 +65,12 @@ watch(
 
       <section class="lg:p-8 mt-2">
         <h3 class="font-bold text-2xl mb-2">Popular</h3>
-        <SongsTable :songs="topTracks" :key="artist.id" :show-artist="false" :show-image="true" />
+        <SongsTable
+          :songs="topTracks || []"
+          :key="artist.id"
+          :show-artist="false"
+          :show-image="true"
+        />
       </section>
     </div>
 

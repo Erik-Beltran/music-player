@@ -169,7 +169,7 @@ watch(isPlaying, (newValue) => {
 
     <CurrentSongCard class="px-2" @click="openModalIfMobile" />
 
-    <div className="flex justify-center flex-col items-center ">
+    <div class="flex justify-center flex-col items-center">
       <button
         @click="playerStore.setIsPlaying(!isPlaying)"
         class="rounded-full bg-white text-black cursor-pointer p-2"

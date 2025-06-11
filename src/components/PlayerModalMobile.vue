@@ -48,7 +48,7 @@ function updateTime(value: number) {
       </button>
 
       <div class="flex flex-1 justify-center items-center flex-col gap-y-10">
-        <picture v-if="currentSong?.images" className="w-full aspect-square md:max-w-10/12">
+        <picture v-if="currentSong?.images" class="w-full aspect-square md:max-w-10/12">
           <img
             :src="currentSong?.images[0].url"
             alt="album cover"
@@ -56,7 +56,7 @@ function updateTime(value: number) {
           />
         </picture>
 
-        <div className="flex flex-col w-full">
+        <div class="flex flex-col w-full">
           <h3 class="font-bold text-xl">
             {{ currentSong?.name }}
           </h3>

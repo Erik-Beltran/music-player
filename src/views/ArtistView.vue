@@ -1,56 +1,57 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { useQuery } from '@tanstack/vue-query'
 
 import ArtistContainer from '@/components/ArtistContainer.vue'
 
 import { getArtist, getArtistTopTracks } from '@/services/spotifyApi'
+
 import type { Artist } from '@/types/artist'
 import type { TopTrack } from '@/types/topTracks'
+
 import { useDominantColor } from '@/composables/useImageColor'
 
 const route = useRoute()
-const artist = ref<Artist>()
-const topTracks = ref<TopTrack[]>([])
+
 const artistScrollContainer = ref<HTMLElement | null>(null)
-
 const artistDominantColor = ref<string>('#18181b')
-
 const { getDominantColor } = useDominantColor()
 
-async function loadArtistData(id: string) {
-  try {
-    artist.value = await getArtist(id)
-    topTracks.value = await getArtistTopTracks(id)
+const artistId = computed(() => route.params.id as string)
 
-    if (artist.value?.images?.[0]?.url) {
-      artistDominantColor.value = await getDominantColor(artist.value.images[0].url)
-    }
-  } catch (err) {
-    console.error('Failed to load artist data', err)
-  }
-}
+const { data: artistQuery } = useQuery<Artist>({
+  queryKey: ['artist', artistId],
+  queryFn: () => getArtist(artistId.value),
+  enabled: !!artistId.value,
+  staleTime: 1000 * 60 * 5,
+})
 
-onMounted(() => {
-  if (route.params.id) {
-    loadArtistData(route.params.id as string)
-  }
+const { data: topTracksQuery = [] } = useQuery<TopTrack[]>({
+  queryKey: ['artistTopTracks', artistId],
+  queryFn: () => getArtistTopTracks(artistId.value),
+  enabled: !!artistId.value,
+  staleTime: 1000 * 60 * 5,
 })
 
 watch(
-  () => route.params.id,
-  async (newId, oldId) => {
-    if (newId && newId !== oldId) {
-      await loadArtistData(newId as string)
-
-      // Espera a que DOM se actualice para hacer scroll
-      requestAnimationFrame(() => {
-        const el = document.getElementById('artist-container')
-        if (el) {
-          el.scrollTo({ top: 0, behavior: 'smooth' })
-        }
-      })
+  () => artistQuery.value?.images?.[0]?.url,
+  async (url) => {
+    if (url) {
+      artistDominantColor.value = await getDominantColor(url)
     }
+  },
+)
+
+watch(
+  () => artistId.value,
+  () => {
+    requestAnimationFrame(() => {
+      const el = document.getElementById('artist-container')
+      if (el) {
+        el.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+    })
   },
 )
 </script>
@@ -60,6 +61,6 @@ watch(
     class="[grid-area:main] rounded-lg bg-zinc-900 overflow-y-auto w-full h-full"
     ref="artistScrollContainer"
   >
-    <ArtistContainer :artist="artist" :topTracks="topTracks" />
+    <ArtistContainer :artist="artistQuery" :topTracks="topTracksQuery" />
   </main>
 </template>

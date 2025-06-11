@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import ArtistCard from '@/components/ArtistCard.vue'
@@ -9,28 +9,17 @@ import TopResultCard from '@/components/TopResultCard.vue'
 
 import { SearchItem } from '@/services/spotifyApi'
 import type { SearchResults } from '@/types/search'
-
-const items = ref<SearchResults | null>(null)
+import { useQuery } from '@tanstack/vue-query'
 
 const route = useRoute()
-const query = ref(route.params.query as string)
+const query = computed(() => route.params.query as string)
 
-const search = async () => {
-  if (!query.value) return
-  items.value = await SearchItem(query.value)
-}
-
-onMounted(async () => {
-  search()
+const { data: items } = useQuery<SearchResults>({
+  queryKey: ['search', query],
+  queryFn: () => SearchItem(query.value),
+  enabled: computed(() => !!query.value),
+  staleTime: 1000 * 60 * 5,
 })
-
-watch(
-  () => route.params.query,
-  (newQuery) => {
-    query.value = newQuery as string
-    search()
-  },
-)
 </script>
 
 <template>

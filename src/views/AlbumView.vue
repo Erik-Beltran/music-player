@@ -1,25 +1,22 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import AlbumContainer from '@/components/AlbumContainer.vue'
 
 import { getAlbum } from '@/services/spotifyApi'
 import type { Album } from '@/types/album'
+import { useQuery } from '@tanstack/vue-query'
 
 const route = useRoute()
-const album = ref<Album>()
 
 const {
   params: { id },
 } = route
 
-onMounted(async () => {
-  try {
-    album.value = await getAlbum(id)
-  } catch (err) {
-    console.error('Failed to load new releases', err)
-  }
+const { data: album } = useQuery<Album>({
+  queryKey: ['album', id],
+  queryFn: () => getAlbum(id),
+  staleTime: Infinity,
 })
 </script>
 
