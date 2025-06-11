@@ -1,21 +1,21 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 
 import { usePlayerStore } from '@/stores/player'
 
 import CurrentSongCard from '@components/CurrentSongCard.vue'
 import SliderContiner from '@components/SliderContiner.vue'
+import PlayButton from '@components/PlayButton.vue'
+import PlayerModalMobile from '@components/PlayerModalMobile.vue'
+import TimeControls from '@components/TimeControls.vue'
 
+import IconVolumeUp from '@icons/IconVolumeUp.vue'
 import IconVolumeMute from '@icons/IconVolumeMute.vue'
 import IconVolumeDown from '@icons/IconVolumeDown.vue'
-import IconVolumeUp from '@icons/IconVolumeUp.vue'
-import IconPause from '@icons/IconPause.vue'
-import IconPlay from '@icons/IconPlay.vue'
-import { getRandomSong } from '@/utils/music'
-import { storeToRefs } from 'pinia'
-import PlayerModalMobile from './PlayerModalMobile.vue'
-import TimeControls from './TimeControls.vue'
+
 import { useDominantColor } from '@/composables/useImageColor'
+import { getRandomSong } from '@/utils/music'
 
 const { getDominantColor } = useDominantColor()
 const playerStore = usePlayerStore()
@@ -170,13 +170,7 @@ watch(isPlaying, (newValue) => {
     <CurrentSongCard class="px-2" @click="openModalIfMobile" />
 
     <div class="flex justify-center flex-col items-center">
-      <button
-        @click="playerStore.setIsPlaying(!isPlaying)"
-        class="rounded-full bg-white text-black cursor-pointer p-2"
-      >
-        <IconPause v-if="isPlaying" />
-        <IconPlay v-else />
-      </button>
+      <PlayButton />
 
       <div
         class="max-lg:absolute max-lg:-bottom-2.5 max-lg:-right-7 max-lg:-left-7 lg:flex lg:w-full"

@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { defineEmits, computed, watch } from 'vue'
+import { useRoute } from 'vue-router'
+
 import { usePlayerStore } from '@/stores/player'
 
-import TimeControls from './TimeControls.vue'
+import TimeControls from '@components/TimeControls.vue'
+import PlayButton from '@components/PlayButton.vue'
+
 import ArrowDown from '@icons/IconArrowDown.vue'
-import { useRoute } from 'vue-router'
 
 const props = defineProps<{
   open: boolean
@@ -76,12 +79,13 @@ function updateTime(value: number) {
           </div>
         </div>
       </div>
-      <div>
+      <div class="flex flex-col items-center gap-y-5">
         <TimeControls
           :currentTime="props.currentTime"
           :duration="props.duration"
           @update:currentTime="updateTime"
         />
+        <PlayButton />
       </div>
     </div>
   </div>

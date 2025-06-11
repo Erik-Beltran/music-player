@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
+
+import PlayingVisualizer from '@components/PlayingVisualizer.vue'
+import IconTime from '@icons/IconTime.vue'
+import IconPlay from '@icons/IconPlay.vue'
+
 import { usePlayerStore } from '@/stores/player'
 import type { TopTrack } from '@/types/topTracks'
 import { formatTime } from '@/utils/formatter'
-import IconTime from '@icons/IconTime.vue'
-import { computed } from 'vue'
-import IconPlay from './icons/IconPlay.vue'
-import PlayingVisualizer from './PlayingVisualizer.vue'
 
 interface Props {
   songs: TopTrack[]
@@ -19,7 +22,10 @@ withDefaults(defineProps<Props>(), {
 })
 
 const playerStore = usePlayerStore()
-const currentSong = computed(() => playerStore.currentMusic.song)
+const { currentMusic } = storeToRefs(playerStore)
+
+const currentSong = computed(() => currentMusic.value.song)
+const currentAlbum = computed(() => currentMusic.value.album)
 
 const isPlaying = computed(() => playerStore.isPlaying)
 
@@ -29,8 +35,8 @@ const handleClick = (song: TopTrack) => {
       ...song,
       images: song.images
         ? song.images
-        : song.album?.images
-          ? song.album.images
+        : currentAlbum.value?.images
+          ? currentAlbum.value?.images
           : currentSong.value?.images,
     },
     album: song.album || null,

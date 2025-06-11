@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import { computed, onMounted, ref, watch } from 'vue'
+
 import CardPlayButton from '@components/CardPlayButton.vue'
 
 import type { Release } from '@/types/song'
 import { getTrackAlbum } from '@/services/spotifyApi'
 import { usePlayerStore } from '@/stores/player'
-import { computed, onMounted, ref, watch } from 'vue'
 
 interface Props {
   release: Release
@@ -38,13 +39,12 @@ onMounted(() => {
 
 <template>
   <article
-    @click="onClick"
     class="group relative hover:bg-zinc-800 shadow-lg hover:shadow-xl rounded-md ransi transition-all duration-300"
   >
     <div
       :class="`absolute right-4 bottom-20  transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 z-10 ${activeItem ? 'opacity-100 translate-y-0' : 'translate-y-4 opacity-0 '}`"
     >
-      <CardPlayButton class="text-4xl hidden lg:block" :id="release.id" />
+      <CardPlayButton class="text-4xl hidden lg:block" :id="release.id" @click="onClick" />
     </div>
 
     <RouterLink

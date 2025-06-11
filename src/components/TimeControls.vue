@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { formatAudioTime } from '@/utils/formatter'
-import SliderContiner from '@components/SliderContiner.vue'
-
 import { defineProps, defineEmits } from 'vue'
+
+import SliderContiner from '@components/SliderContiner.vue'
+import { formatAudioTime } from '@/utils/formatter'
 
 defineProps({
   currentTime: Number,
@@ -20,7 +20,7 @@ function onSliderChange(value: number) {
   <div class="flex gap-x-3 text-xs pt-2 items-center w-full justify-center">
     <span>{{ formatAudioTime(currentTime ?? 0) }}</span>
 
-    <div class="w-full">
+    <div class="w-full lg:max-w-[60%]">
       <SliderContiner
         :max="duration ?? 0"
         :model-value="currentTime ?? 0"

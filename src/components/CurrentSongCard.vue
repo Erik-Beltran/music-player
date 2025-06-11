@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { usePlayerStore } from '@/stores/player'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-const playerStore = usePlayerStore()
+import { usePlayerStore } from '@/stores/player'
 
+const playerStore = usePlayerStore()
 const currentSong = computed(() => playerStore.currentMusic.song)
 
 const songNameRef = ref<HTMLElement | null>(null)
@@ -41,7 +41,7 @@ onBeforeUnmount(() => {
   <div class="flex items-center gap-5 relative overflow-hidden">
     <picture
       v-if="currentSong?.images"
-      className="w-16 h-16 bg-zinc-800 rounded-md shadow-lg overflow-hidden"
+      class="w-16 h-16 bg-zinc-800 rounded-md shadow-lg overflow-hidden"
     >
       <img
         :src="currentSong?.images[0].url"
@@ -50,7 +50,7 @@ onBeforeUnmount(() => {
       />
     </picture>
 
-    <div className="flex flex-col  flex-1 overflow-hidden whitespace-nowrap">
+    <div class="flex flex-col flex-1 overflow-hidden whitespace-nowrap">
       <h3
         ref="songNameRef"
         :class="['font-semibold text-xs', isSongNameOverflow ? 'animate-marquee inline-block' : '']"
