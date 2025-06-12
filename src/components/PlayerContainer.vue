@@ -38,12 +38,6 @@ const updateMobileStatus = () => {
   isMobile.value = window.innerWidth < 1024
 }
 
-// const backgroundStyle = computed(() => {
-//   return isMobile.value
-//     ? `background: linear-gradient(to bottom, ${dominantColor.value} 10%, #18181b 60%);`
-//     : 'background: none;'
-// })
-
 function openModalIfMobile() {
   if (isMobile.value) {
     isMobileModalOpen.value = true
