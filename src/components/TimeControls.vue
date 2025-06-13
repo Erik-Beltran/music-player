@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
+import { defineEmits } from 'vue'
 
 import SliderContiner from '@components/SliderContiner.vue'
 import { formatAudioTime } from '@/utils/formatter'

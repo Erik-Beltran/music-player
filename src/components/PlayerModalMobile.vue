@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineEmits, computed, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { usePlayerStore } from '@/stores/player'
