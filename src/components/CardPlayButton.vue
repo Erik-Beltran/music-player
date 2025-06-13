@@ -8,13 +8,11 @@ import type { TopTrack } from '@/types/topTracks'
 const props = defineProps<{
   id?: string | string[]
   song?: TopTrack
-  isTopResult?: boolean
 }>()
-const { id, isTopResult, song } = props
+const { id, song } = props
 
 const displayedId = ref(id)
 const isPlayingPlayList = ref(false)
-
 const playerStore = usePlayerStore()
 
 const isPlaying = computed(() => playerStore.isPlaying)
@@ -22,8 +20,7 @@ const currentAlbum = computed(() => playerStore.currentMusic.album)
 
 const handleClick = () => {
   playerStore.setIsPlaying(!isPlayingPlayList.value)
-
-  if (isTopResult && song) {
+  if (song) {
     playerStore.setCurrentMusic({
       song: { ...song, images: song.album?.images },
       album: song.album || null,

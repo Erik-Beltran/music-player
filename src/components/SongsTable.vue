@@ -35,11 +35,11 @@ const handleClick = (song: TopTrack) => {
       ...song,
       images: song.images
         ? song.images
-        : currentAlbum.value?.images
-          ? currentAlbum.value?.images
-          : currentSong.value?.images,
+        : song.album
+          ? song.album.images
+          : currentAlbum.value?.images,
     },
-    album: song.album || null,
+    album: song.album ? song.album : currentAlbum.value,
   })
   playerStore.setIsPlaying(true)
 }

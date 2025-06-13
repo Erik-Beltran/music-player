@@ -7,7 +7,7 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const { name, artists, id, album } = props.song
+const { name, artists, album } = props.song
 const image = album && album.images?.[0]?.url
 </script>
 
@@ -18,7 +18,7 @@ const image = album && album.images?.[0]?.url
     <div
       class="absolute right-4 bottom-5 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 z-10 translate-y-4 opacity-0"
     >
-      <CardPlayButton class="text-3xl" :id="id" :song="song" :is-top-result="true" />
+      <CardPlayButton class="text-3xl" :id="album?.id" :song="song" :is-top-result="true" />
     </div>
     <picture v-if="image">
       <img :src="image" :alt="name" class="w-20 h-20" />
